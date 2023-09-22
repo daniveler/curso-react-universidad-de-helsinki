@@ -3,37 +3,43 @@ import ReactDOM from 'react-dom'
 
 const Header = (props) => {
   return (
-    <div>
+    <>
       <p>
         <h1>Welcome to the course: {props.course}</h1>
       </p>
-    </div>
+    </>
   )
 }
 
 const Content = (props) => {
   return (
-    <div>
+    <>
       <p>
-        <h2>{props.part1}</h2>
-        <p>Exercises: {props.exercises1}</p>
-        <h2>{props.part2}</h2>
-        <p>Exercises: {props.exercises2}</p>
-        <h2>{props.part3}</h2>
-        <p>Exercises: {props.exercises3}</p>
+        <Part part={props.part1} exercises={props.exercises1}/>
+        <Part part={props.part2} exercises={props.exercises2}/>
+        <Part part={props.part3} exercises={props.exercises3}/>
       </p>
-    </div>
+    </>
   )
 }
 
 const Footer = () => {
   return (
-    <div>
+    <>
       <br/> <br/>
       <p>
       greeting app created by <a href="https://github.com/daniveler">daniveler</a>
       </p>
-    </div>
+    </>
+  )
+}
+
+const Part = (props) => {
+  return (
+    <>
+      <h2>{props.part}</h2>
+      <p>Exercises: {props.exercises}</p>
+    </>
   )
 }
 
@@ -50,7 +56,8 @@ const App = () => {
   return (
     <>
       <Header course={course} />
-      <Content part1={part1} part2={part2} part3={part3}
+      <Content 
+        part1={part1} part2={part2} part3={part3}
         exercises1={exercises1} exercises2={exercises2} exercises3={exercises3}/>
       <Footer />
     </>

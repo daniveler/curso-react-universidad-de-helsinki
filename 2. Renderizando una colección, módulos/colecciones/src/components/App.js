@@ -1,5 +1,6 @@
 import React from 'react'
 import Note from './Note'
+
 const App = ({ notes }) => {
     return (
         <div>

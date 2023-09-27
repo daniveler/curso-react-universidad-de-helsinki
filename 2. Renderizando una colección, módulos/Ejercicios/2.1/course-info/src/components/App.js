@@ -28,11 +28,9 @@ const App = () => {
 
   return (
     <>
-    <p>
       {courses.map(course => (
           <Course key={course.id} course={course} />
         ))}
-    </p>
       
       <Footer />
     </>

@@ -25,7 +25,7 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
-  const filteredPersons = persons.filter(person => person.name.includes(newFilter))
+  const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
   
   const filterResult = filteredPersons.length !== 0
     ? filteredPersons
@@ -33,6 +33,12 @@ const App = () => {
 
   const addFilter = (event) => {
     event.preventDefault()
+    setPersons(filterResult)
+  }
+
+  const clearFilter = (event) => {
+    event.preventDefault()
+    setNewFilter('')
     setPersons(filterResult)
   }
 
@@ -65,7 +71,7 @@ const App = () => {
           <input value={newFilter} onChange={handleFilterChange} />
           <button type="submit">filter</button>
           <div>
-            <button onClick={addFilter}>
+            <button type="submit" onClick={clearFilter}>
               clear filter
             </button>
           </div>

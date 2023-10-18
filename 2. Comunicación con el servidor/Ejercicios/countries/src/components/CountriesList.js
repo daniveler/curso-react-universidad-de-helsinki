@@ -2,8 +2,6 @@ import Country from './Country.js'
 
 function CountriesList({ listCountries }) {
 
-  var isOnly = false
-
   if (listCountries.length > 10) {
     return (
       <div>
@@ -19,17 +17,13 @@ function CountriesList({ listCountries }) {
     </div>
     )
   }
-
-  if (listCountries.length === 1) {
-    isOnly = true
-  }
    
 
   return (
     <div>
       <ul>
         {listCountries.map(country => {
-          return <Country isOnly={isOnly} country={country} />
+          return <Country  country={country} />
         })}
       </ul>
     </div>

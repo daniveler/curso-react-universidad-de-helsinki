@@ -13,9 +13,7 @@ function CountryFinder({ listCountries }) {
 
   return (
     <div>
-      <form onSubmit={setSearchedCountry}>
-        Search country: <input value={searchedCountry} onChange={handleSearchedCountryChange}></input>
-      </form>
+      Search country: <input value={searchedCountry} onChange={handleSearchedCountryChange}></input>
       <CountriesList listCountries={filteredCountries}></CountriesList>
     </div>
   )

@@ -1,17 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Person from './Person'
+import axios from 'axios'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', phone: 666666666, id: 1 },
-    { name: 'Paco Hellas', phone: 401234568, id: 2 },
-    { name: 'Ada Lovelace', phone: 394453235, id: 3 },
-    { name: 'Dan Abramov', phone: 432343476, id: 4 },
-    { name: 'Mary Poppendieck', phone: 236423122, id: 5 }
+    // { name: 'Arto Hellas', phone: 666666666, id: 1 },
+    // { name: 'Paco Hellas', phone: 401234568, id: 2 },
+    // { name: 'Ada Lovelace', phone: 394453235, id: 3 },
+    // { name: 'Dan Abramov', phone: 432343476, id: 4 },
+    // { name: 'Mary Poppendieck', phone: 236423122, id: 5 }
   ])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newFilter, setNewFilter] = useState('')
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)

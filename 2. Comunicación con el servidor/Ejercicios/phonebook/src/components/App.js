@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import Person from './Person'
-import axios from 'axios'
+import personsService from '../services/persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    // { name: 'Arto Hellas', phone: 666666666, id: 1 },
-    // { name: 'Paco Hellas', phone: 401234568, id: 2 },
-    // { name: 'Ada Lovelace', phone: 394453235, id: 3 },
-    // { name: 'Dan Abramov', phone: 432343476, id: 4 },
-    // { name: 'Mary Poppendieck', phone: 236423122, id: 5 }
-  ])
-  const [newName, setNewName] = useState('')
-  const [newPhone, setNewPhone] = useState('')
+  const [persons, setPersons] = useState([])
+  const [filteredPersons, setFilteredPersons] = useState([])
+  const [newName, setNewName] = useState('Dani')
+  const [newPhone, setNewPhone] = useState('666666666')
   const [newFilter, setNewFilter] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    personsService.getAllPersons()
       .then(response => {
-        setPersons(response.data)
+        setPersons(response)
+        setFilteredPersons(response)
       })
   }, [])
 
@@ -35,41 +29,51 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
-  const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
-  
-  const filterResult = filteredPersons.length !== 0
-    ? filteredPersons
-    : persons
+  const filterPersons = (persons, filter) => {
+    return persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
+  }
 
   const addFilter = (event) => {
     event.preventDefault()
-    setPersons(filterResult)
+
+    const temp = filterPersons(persons, newFilter)
+
+    if (temp.length !== 0 ) {
+      setFilteredPersons(filterPersons(persons, newFilter))
+    }
+    else {
+      alert('No numbers matching this filters. Please, try again or clear filters to show again the whole list.')
+    }
   }
 
   const clearFilter = (event) => {
     event.preventDefault()
     setNewFilter('')
-    setPersons(filterResult)
+    setFilteredPersons(persons)
   }
 
   const addName = (event) => {
     event.preventDefault()
-    const phoneObject = {
+    const personObject = {
       name: newName,
       phone: newPhone,
       id: persons.length + 1
     }
 
-    if (!phoneObject.name || !phoneObject.name.trim().length) {
+    if (!personObject.name || !personObject.name.trim().length) {
       alert("Person's name can not be empty")
     }
-    else if (filterResult.some(person => person.name === phoneObject.name)) {
-      alert(phoneObject.name + " alredy exists in the phonebook")
+    else if (!personObject.phone || !personObject.phone.trim().length) {
+      alert("Person's phone can not be empty")
+    }
+    else if (persons.some(person => person.name === personObject.name)) {
+      alert(personObject.name + " alredy exists in the phonebook")
     }
     else {
-      setPersons(filterResult.concat(phoneObject))
       setNewName('')
       setNewPhone('')
+      setPersons(persons.concat(personObject))
+      setFilteredPersons(persons.concat(personObject))
     }
   }
 
@@ -105,7 +109,7 @@ const App = () => {
           <th>Name</th>
           <th>Phone Number</th>
         </tr>
-        {persons.map(person =>
+        {filteredPersons.map(person =>
           <Person name={person.name} phone={person.phone} />
         )}
         </tbody>

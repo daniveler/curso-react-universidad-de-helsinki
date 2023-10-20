@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Person from './Person'
 import personsService from '../services/persons'
+import '../styles/App.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -15,7 +16,10 @@ const App = () => {
         setPersons(response)
         setFilteredPersons(response)
       })
-  }, [])
+      .catch(error => {
+        alert('ERROR: Data could not be returned from database')
+      })
+    }, [])
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -27,6 +31,25 @@ const App = () => {
 
   const handleFilterChange = (event) => {
     setNewFilter(event.target.value)
+  }
+
+  const handleDeletePerson = (personToDelete) => {
+    const updatedPersons = persons.filter(person => person.id !== personToDelete.id);
+    
+    const userConfirmed = window.confirm(`Are you sure you want to remove ${personToDelete.name} from the phonebook?`);
+
+    if (userConfirmed) {
+      personsService.deletePerson(personToDelete.id)
+        .then(() => {
+          alert(`${personToDelete.name} was succesfully deleted`);
+          setPersons(updatedPersons)
+          setFilteredPersons(updatedPersons)
+        }) 
+        .catch(error => {
+          alert('ERROR: Person was not found in database')
+          return
+        })
+    }
   }
 
   const filterPersons = (persons, filter) => {
@@ -60,20 +83,45 @@ const App = () => {
       id: persons.length + 1
     }
 
+    const personFound = persons.find(person => person.name === personObject.name)
+
     if (!personObject.name || !personObject.name.trim().length) {
       alert("Person's name can not be empty")
     }
     else if (!personObject.phone || !personObject.phone.trim().length) {
       alert("Person's phone can not be empty")
     }
-    else if (persons.some(person => person.name === personObject.name)) {
-      alert(personObject.name + " alredy exists in the phonebook")
+    else if (personFound) {
+      const userConfirmed = window.confirm(personFound.name + " alredy exists in the phonebook. Do you want to replace the old phone number with the new one?")
+
+      if (userConfirmed) {
+        personsService.updatePerson(personFound.id, personObject)
+          .then(() => 
+            {
+              alert(`${personFound.name}'s phone number was updated`)
+              personsService.getAllPersons()
+                .then(response => {
+                  setPersons(response)
+                  setFilteredPersons(response)
+                })
+                .catch(error => {
+                  alert('ERROR: Data could not be returned from database')
+                })
+            })
+          .catch(error => {
+            alert('ERROR: Phone number could not be updated')
+          })
+      }
     }
     else {
       setNewName('')
       setNewPhone('')
       setPersons(persons.concat(personObject))
       setFilteredPersons(persons.concat(personObject))
+      personsService.createPerson(personObject)
+        .catch(error => {
+          alert('ERROR: New person could not be created')
+        })
     }
   }
 
@@ -83,12 +131,10 @@ const App = () => {
       <form onSubmit={addFilter}>
         <div>Search contacts: 
           <input value={newFilter} onChange={handleFilterChange} />
-          <button type="submit">filter</button>
-          <div>
-            <button type="submit" onClick={clearFilter}>
-              clear filter
-            </button>
-          </div>
+          <button className='primary' type="submit">Filter</button>
+          <button className='primary' type="submit" onClick={clearFilter}>
+            Clear filter
+          </button>
         </div>
         <br/><br/>
       </form>
@@ -97,9 +143,7 @@ const App = () => {
           name: <input value={newName} onChange={handleNameChange} /> 
           phone: <input type="tel" value={newPhone} onChange={handlePhoneChange} pattern="[0-9]{3}[0-9]{3}[0-9]{3}" />
           <small>Format: 123456789</small>
-        </div>
-        <div>
-          <button type="submit">add</button>
+          <button className='primary' type="submit">Add Person</button>
         </div>
       </form>
       <h2>Numbers</h2>
@@ -110,7 +154,9 @@ const App = () => {
           <th>Phone Number</th>
         </tr>
         {filteredPersons.map(person =>
-          <Person name={person.name} phone={person.phone} />
+          <div>
+            <Person person={person} onDelete={handleDeletePerson} />
+          </div>
         )}
         </tbody>
       </table>

@@ -47,7 +47,6 @@ const App = () => {
         }) 
         .catch(error => {
           alert(`ERROR: ${personToDelete.name} was not found in database`)
-          return
         })
     }
   }
@@ -75,12 +74,11 @@ const App = () => {
     setFilteredPersons(persons)
   }
 
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
-      id: persons.length + 1,
       name: newName,
-      phone: newPhone,
+      phoneNumber: newPhone
     }
 
     const personFound = persons.find(person => person.name === personObject.name)
@@ -88,7 +86,7 @@ const App = () => {
     if (!personObject.name || !personObject.name.trim().length) {
       alert("Person's name can not be empty")
     }
-    else if (!personObject.phone || !personObject.phone.trim().length) {
+    else if (!personObject.phoneNumber || !personObject.phoneNumber.trim().length) {
       alert("Person's phone can not be empty")
     }
     else if (personFound) {
@@ -116,9 +114,14 @@ const App = () => {
     else {
       setNewName('')
       setNewPhone('')
-      setPersons(persons.concat(personObject))
-      setFilteredPersons(persons.concat(personObject))
       personsService.createPerson(personObject)
+        .then(() => {
+          personsService.getAllPersons()
+          .then(response => {
+            setPersons(response)
+            setFilteredPersons(response)
+          })
+        })
         .catch(error => {
           alert('ERROR: New person could not be created')
         })
@@ -138,7 +141,7 @@ const App = () => {
         </div>
         <br/><br/>
       </form>
-      <form onSubmit={addName}>
+      <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handleNameChange} /> 
           phone: <input type="tel" value={newPhone} onChange={handlePhoneChange} pattern="[0-9]{3}[0-9]{3}[0-9]{3}" />

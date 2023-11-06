@@ -8,7 +8,7 @@ const Person = ({ person, onDelete }) => {
     return  (
         <tr>
             <td>{person.name}</td>
-            <td>{person.phone}</td> 
+            <td>{person.phoneNumber}</td> 
             <button className="delete" onClick={() => { deletePerson(person) }}>Delete</button> 
         </tr>
     )

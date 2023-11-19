@@ -1,12 +1,14 @@
 require ('dotenv').config()
 
 const express = require('express')
-const bodyParser = require('body-parser');
+const cors = require('cors')
+const bodyParser = require('body-parser')
 const Note = require('./models/note')
 
 const app = express()
 
-app.use(bodyParser.json());
+app.use(bodyParser.json())
+app.use(cors())
 
 app.get('/api/notes', (request, response) => {
     Note.find({}).then(notes => {
@@ -41,5 +43,5 @@ app.post('/api/notes', (request, response) => {
 const PORT = process.env.PORT
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
+  console.log(`Server Get All running on http://localhost:${PORT}/api/notes`)
 })

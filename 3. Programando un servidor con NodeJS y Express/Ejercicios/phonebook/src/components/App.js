@@ -16,7 +16,7 @@ const App = () => {
         setPersons(response)
         setFilteredPersons(response)
       })
-      .catch(error => {
+      .catch(() => {
         alert('ERROR: Data could not be returned from database')
       })
     }, [])
@@ -45,7 +45,7 @@ const App = () => {
           setPersons(updatedPersons)
           setFilteredPersons(updatedPersons)
         }) 
-        .catch(error => {
+        .catch(() => {
           alert(`ERROR: ${personToDelete.name} was not found in database`)
         })
     }
@@ -102,11 +102,11 @@ const App = () => {
                   setPersons(response)
                   setFilteredPersons(response)
                 })
-                .catch(error => {
+                .catch(() => {
                   alert('ERROR: Data could not be returned from database')
                 })
             })
-          .catch(error => {
+          .catch(() => {
             alert('ERROR: Phone number could not be updated')
           })
       }
@@ -122,7 +122,7 @@ const App = () => {
             setFilteredPersons(response)
           })
         })
-        .catch(error => {
+        .catch(() => {
           alert('ERROR: New person could not be created')
         })
     }
@@ -157,7 +157,7 @@ const App = () => {
           <th>Phone Number</th>
         </tr>
         {filteredPersons.map(person =>
-          <div>
+          <div key={person.id}>
             <Person person={person} onDelete={() => handleDeletePerson(person)} />
           </div>
         )}

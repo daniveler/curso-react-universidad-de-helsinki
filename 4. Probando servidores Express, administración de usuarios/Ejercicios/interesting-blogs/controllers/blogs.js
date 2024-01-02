@@ -1,8 +1,7 @@
 const blogsRouter = require('express').Router()
+
 const Blog = require('../models/blog')
 const bodyParser = require('body-parser')
-
-app.use(bodyParser.json())
 
 blogsRouter.get('/', (request, response) => {
   Blog
@@ -12,7 +11,7 @@ blogsRouter.get('/', (request, response) => {
     })
 })
 
-blogsRouter.post('/', (request, response, next) => {
+blogsRouter.post('/', (request, response) => {
   const body = request.body
 
   const blog = new Blog({

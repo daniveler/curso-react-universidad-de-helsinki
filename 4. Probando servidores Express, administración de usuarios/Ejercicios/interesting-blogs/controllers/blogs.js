@@ -1,7 +1,6 @@
 const blogsRouter = require('express').Router()
 
 const Blog = require('../models/blog')
-const bodyParser = require('body-parser')
 
 blogsRouter.get('/', (request, response) => {
   Blog

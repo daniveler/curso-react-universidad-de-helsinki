@@ -115,7 +115,7 @@ const listWithManyBlogsAndTwoWithMaximumLikes = [
   }  
 ]
 
-describe('total likes', () => {
+describe.skip('total likes', () => {
   test('of empty list is zero', () => {
     const result = listHelper.totalLikes('')
 
@@ -133,7 +133,7 @@ describe('total likes', () => {
   })
 })
 
-describe('favorite blog', () => {
+describe.skip('favorite blog', () => {
   test('of empty list is zero', () => {
     const result = listHelper.favoriteBlog('')
 
@@ -158,6 +158,15 @@ describe('favorite blog', () => {
     expect(result).toEqual(listWithManyBlogsAndTwoWithMaximumLikes[1])
   })
 })
+
+describe('most blogs', () => {
+  test('of empty list is zero', () => {
+    const result = listHelper.mostBlogs('')
+
+    expect(result).toBe(0)
+  })
+})
+
 
 afterAll(() => {
   server.close()

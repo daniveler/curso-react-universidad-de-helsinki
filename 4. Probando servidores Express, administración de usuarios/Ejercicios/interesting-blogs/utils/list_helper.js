@@ -1,5 +1,3 @@
-const logger = require('./logger')
-
 const totalLikes = (blogs) => {
   let likesCount = 0
 

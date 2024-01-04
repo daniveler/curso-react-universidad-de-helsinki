@@ -43,6 +43,13 @@ const listWithManyBlogs = [
   }  
 ]
 
+const newBlogBody = {
+  title: "Example blog",
+  author: "Example Author",
+  url: "https://www.exampleurl.com",
+  likes: "69"
+}
+
 const api = supertest(app)
 
 beforeEach(async () => {
@@ -75,6 +82,16 @@ describe('api tests', () => {
     const response = await api.get('/api/blogs')
 
     expect(response.body[0].id).toBeDefined()
+  })
+  
+  test('blogs are created correctly', async() => {
+    const postResponse = await api.post('/api/blogs').send(newBlogBody)
+
+    expect(postResponse.status).toBe(200)
+
+    const getResponse = await api.get('/api/blogs')
+
+    expect(getResponse.body).toHaveLength(listWithManyBlogs.length + 1)
   })
 })
 

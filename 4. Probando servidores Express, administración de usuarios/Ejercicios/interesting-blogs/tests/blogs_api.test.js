@@ -56,6 +56,10 @@ const newBlogWithNoLikesBody = {
   url: "https://www.nolikesexampleurl.com"
 }
 
+const incorrectBody = {
+  author: "No Likes Example Author"
+}
+
 const api = supertest(app)
 
 beforeEach(async () => {
@@ -110,6 +114,12 @@ describe('api tests', () => {
     let blogWithNoLikes = getResponse.body.find(blog => blog.title === newBlogWithNoLikesBody.title)
 
     expect(blogWithNoLikes.likes).toBe(0)
+  })
+
+  test('when title or url are not sent in the post body, it returns 400 Bad Request', async() => {
+    const postResponse = await api.post('/api/blogs').send(incorrectBody)
+
+    expect(postResponse.status).toBe(400)
   })
 })
 

@@ -50,6 +50,12 @@ const newBlogBody = {
   likes: "69"
 }
 
+const newBlogWithNoLikesBody = {
+  title: "No Likes Example blog",
+  author: "No Likes Example Author",
+  url: "https://www.nolikesexampleurl.com"
+}
+
 const api = supertest(app)
 
 beforeEach(async () => {
@@ -84,7 +90,7 @@ describe('api tests', () => {
     expect(response.body[0].id).toBeDefined()
   })
   
-  test('blogs are created correctly', async() => {
+  test('when a blog is created it is correctly saved in database', async() => {
     const postResponse = await api.post('/api/blogs').send(newBlogBody)
 
     expect(postResponse.status).toBe(200)
@@ -92,6 +98,18 @@ describe('api tests', () => {
     const getResponse = await api.get('/api/blogs')
 
     expect(getResponse.body).toHaveLength(listWithManyBlogs.length + 1)
+  })
+
+  test('when the property likes is not sent in the post body, the blog has 0 likes by default', async() => {
+    const postResponse = await api.post('/api/blogs').send(newBlogWithNoLikesBody)
+
+    expect(postResponse.status).toBe(200)
+
+    const getResponse = await api.get('/api/blogs')
+
+    let blogWithNoLikes = getResponse.body.find(blog => blog.title === newBlogWithNoLikesBody.title)
+
+    expect(blogWithNoLikes.likes).toBe(0)
   })
 })
 

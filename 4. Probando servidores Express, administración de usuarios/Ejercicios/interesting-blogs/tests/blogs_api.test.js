@@ -70,6 +70,12 @@ describe('api tests', () => {
 
     expect(response.body).toHaveLength(listWithManyBlogs.length)
   })
+
+  test('id property of each blog is defined correctly', async() => {
+    const response = await api.get('/api/blogs')
+
+    expect(response.body[0].id).toBeDefined()
+  })
 })
 
 afterAll(() => {

@@ -54,8 +54,37 @@ const mostBlogs = (blogs) => {
   return authorList.find(author => author.blogs === Math.max(...blogsNumList))
 }
 
+const mostLikes = (blogs) => {
+  if (!blogs) {
+    return 0
+  }
+
+  let authorList = []
+  
+  blogs.forEach(blog => {
+    // Search the index of the author in the author list
+    let index = authorList.findIndex(author => author.author === blog.author)
+
+    // If it's found, we increment his number of likes
+    if (index !== -1) {
+      authorList[index].likes += blog.likes
+    }
+    // If not, we add it as a new author
+    else {
+      authorList.push({ author: blog.author, likes: blog.likes })
+    }
+  })
+
+  // Get an array of all likes
+  let likesNumList = authorList.map(author => author.likes)
+
+  // Return the author which has the maximum likes
+  return authorList.find(author => author.likes === Math.max(...likesNumList))
+}
+
 module.exports = {
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }

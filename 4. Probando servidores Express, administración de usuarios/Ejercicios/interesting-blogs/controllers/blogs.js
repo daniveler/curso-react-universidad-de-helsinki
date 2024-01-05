@@ -1,5 +1,6 @@
 const blogsRouter = require('express').Router()
 
+const { default: mongoose } = require('mongoose')
 const Blog = require('../models/blog')
 
 blogsRouter.get('/', async(request, response) => {
@@ -17,16 +18,22 @@ blogsRouter.post('/', async(request, response, next) => {
     likes: body.likes || 0
   })
 
-  // If the body is not valid
-  // if (!blog.title || !blog.author || !blog.url || !blog.likes) {
-  //   response.status(400).json({ error: 'Incorrect body' })
-  // }
-  // else {
-
   try {
     const savedBlog = await blog.save()
     response.json(savedBlog)
   } 
+  catch(error) {
+    next(error)
+  }
+})
+
+blogsRouter.delete('/:id', async(request, response, next) => {
+  const idToDelete = request.params.id
+
+  try {
+    const deletedBlog = await Blog.findByIdAndDelete(idToDelete)
+    response.status(204).end()
+  }
   catch(error) {
     next(error)
   }

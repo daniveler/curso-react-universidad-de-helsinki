@@ -3,6 +3,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const { server } = require('../index')
 const Blog = require('../models/blog')
+const blog = require('../models/blog')
 
 const listWithManyBlogs = [
   {
@@ -74,7 +75,7 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-describe('api tests', () => {
+describe('GET requests', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -93,7 +94,9 @@ describe('api tests', () => {
 
     expect(response.body[0].id).toBeDefined()
   })
-  
+})
+
+describe('POST requests', () => {
   test('when a blog is created it is correctly saved in database', async() => {
     const postResponse = await api.post('/api/blogs').send(newBlogBody)
 
@@ -104,7 +107,7 @@ describe('api tests', () => {
     expect(getResponse.body).toHaveLength(listWithManyBlogs.length + 1)
   })
 
-  test('when the property likes is not sent in the post body, the blog has 0 likes by default', async() => {
+  test('when the property likes is not sent body, the blog has 0 likes by default', async() => {
     const postResponse = await api.post('/api/blogs').send(newBlogWithNoLikesBody)
 
     expect(postResponse.status).toBe(200)
@@ -116,10 +119,38 @@ describe('api tests', () => {
     expect(blogWithNoLikes.likes).toBe(0)
   })
 
-  test('when title or url are not sent in the post body, it returns 400 Bad Request', async() => {
+  test('when title or url are not sent in the body, it returns 400 Bad Request', async() => {
     const postResponse = await api.post('/api/blogs').send(incorrectBody)
 
     expect(postResponse.status).toBe(400)
+  })
+})
+
+describe('DELETE requests', () => {
+  test('when the id is not specified, it returns 404 Not Found', async() => {
+    const response = await api.delete('/api/blogs')
+
+    expect(response.status).toBe(404)
+  })
+
+  test('when the id does not exists on the database, it returns 404 Not Found', async() => {
+    const response = await api.delete('/api/blogs', '1234')
+
+    expect(response.status).toBe(404)
+  })
+
+  test('when the id exists, the blog is deleted correctly', async() => {
+    const getResponse = await api.get('/api/blogs')
+
+    const blogToDelete = getResponse.body.find(blog => blog.title === 'React patterns')
+    
+    const deleteResponse = await api.delete('/api/blogs/' + blogToDelete.id)
+
+    expect(deleteResponse.status).toBe(204)
+
+    const getSecondResponse = await api.get('/api/blogs')
+
+    expect(getSecondResponse.body).toHaveLength(listWithManyBlogs.length - 1)
   })
 })
 

@@ -61,6 +61,17 @@ const incorrectBody = {
   author: "No Likes Example Author"
 }
 
+const invalidBody = {
+  invalidProperty: "example"
+}
+
+const updatedBody = {
+  title: "New React patterns",
+  author: "Michael Chan",
+  url: "https://newreactpatterns.com/",
+  likes: 200,
+}
+
 const api = supertest(app)
 
 beforeEach(async () => {
@@ -154,6 +165,55 @@ describe('DELETE requests', () => {
   })
 })
 
+describe('PUT requests', () => {
+  test('when the body is empty, it returns 400', async() => {
+    const getResponse = await api.get('/api/blogs')
+
+    const blogToUpdate = getResponse.body.find(blog => blog.title === 'React patterns')
+    
+    const putResponse = await api
+      .put('/api/blogs/' + blogToUpdate.id)
+      .send('')
+
+    expect(putResponse.status).toBe(400)
+  })
+
+  test('when the body is invalid, it returns 400', async() => {
+    const getResponse = await api.get('/api/blogs')
+
+    const blogToUpdate = getResponse.body.find(blog => blog.title === 'React patterns')
+    
+    const putResponse = await api
+      .put('/api/blogs/' + blogToUpdate.id)
+      .send(invalidBody)
+
+    expect(putResponse.status).toBe(400)
+  })
+
+  test('when the body is valid the blog is updated', async() => {
+    const getResponse = await api.get('/api/blogs')
+
+    const blogToUpdate = getResponse.body.find(blog => blog.title === 'React patterns')
+    
+    const putResponse = await api
+      .put('/api/blogs/' + blogToUpdate.id)
+      .send(updatedBody)
+
+    expect(putResponse.status).toBe(200)
+
+    const secondGetResponse = await api.get('/api/blogs')
+
+    const blogUpdated = secondGetResponse.body.find(blog => blog.id === blogToUpdate.id)
+
+    expect(blogUpdated).toEqual({
+      id: blogToUpdate.id,
+      title: "New React patterns",
+      author: "Michael Chan",
+      url: "https://newreactpatterns.com/",
+      likes: 200,
+    })
+  })
+})
 afterAll(() => {
   server.close()
   mongoose.connection.close()

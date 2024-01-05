@@ -1,6 +1,4 @@
 const blogsRouter = require('express').Router()
-
-const { default: mongoose } = require('mongoose')
 const Blog = require('../models/blog')
 
 blogsRouter.get('/', async(request, response) => {
@@ -22,6 +20,22 @@ blogsRouter.post('/', async(request, response, next) => {
     const savedBlog = await blog.save()
     response.json(savedBlog)
   } 
+  catch(error) {
+    next(error)
+  }
+})
+
+blogsRouter.put('/:id', async(request, response, next) => {
+  const updatedBody = request.body
+
+  try {
+    if(!updatedBody || !updatedBody.title || !updatedBody.url) {
+      response.status(400)
+    }
+    
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, updatedBody, { new: true })
+    response.json(updatedBlog)
+  }
   catch(error) {
     next(error)
   }

@@ -3,81 +3,13 @@ const supertest = require('supertest')
 const app = require('../app')
 const { server } = require('../index')
 const Blog = require('../models/blog')
-const blog = require('../models/blog')
-
-const listWithManyBlogs = [
-  {
-    title: "React patterns",
-    author: "Michael Chan",
-    url: "https://reactpatterns.com/",
-    likes: 7,
-  },
-  {
-    title: "Go To Statement Considered Harmful",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-    likes: 5,
-  },
-  {
-    title: "Canonical string reduction",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-    likes: 12,
-  },
-  {
-    title: "First class tests",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-    likes: 10,
-  },
-  {
-    title: "TDD harms architecture",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-    likes: 0,
-  },
-  {
-    title: "Type wars",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-    likes: 2,
-  }  
-]
-
-const newBlogBody = {
-  title: "Example blog",
-  author: "Example Author",
-  url: "https://www.exampleurl.com",
-  likes: "69"
-}
-
-const newBlogWithNoLikesBody = {
-  title: "No Likes Example blog",
-  author: "No Likes Example Author",
-  url: "https://www.nolikesexampleurl.com"
-}
-
-const incorrectBody = {
-  author: "No Likes Example Author"
-}
-
-const invalidBody = {
-  invalidProperty: "example"
-}
-
-const updatedBody = {
-  title: "New React patterns",
-  author: "Michael Chan",
-  url: "https://newreactpatterns.com/",
-  likes: 200,
-}
-
 const api = supertest(app)
+const helper = require('./test_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
 
-  const blogObjects = listWithManyBlogs.map(blog => new Blog(blog))
+  const blogObjects = helper.listWithManyBlogs.map(blog => new Blog(blog))
 
   const promiseArray = blogObjects.map(blog => blog.save())
 
@@ -97,7 +29,7 @@ describe('GET requests', () => {
   test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs')
 
-    expect(response.body).toHaveLength(listWithManyBlogs.length)
+    expect(response.body).toHaveLength(helper.listWithManyBlogs.length)
   })
 
   test('id property of each blog is defined correctly', async() => {
@@ -109,29 +41,29 @@ describe('GET requests', () => {
 
 describe('POST requests', () => {
   test('when a blog is created it is correctly saved in database', async() => {
-    const postResponse = await api.post('/api/blogs').send(newBlogBody)
+    const postResponse = await api.post('/api/blogs').send(helper.newBlogBody)
 
     expect(postResponse.status).toBe(200)
 
     const getResponse = await api.get('/api/blogs')
 
-    expect(getResponse.body).toHaveLength(listWithManyBlogs.length + 1)
+    expect(getResponse.body).toHaveLength(helper.listWithManyBlogs.length + 1)
   })
 
   test('when the property likes is not sent body, the blog has 0 likes by default', async() => {
-    const postResponse = await api.post('/api/blogs').send(newBlogWithNoLikesBody)
+    const postResponse = await api.post('/api/blogs').send(helper.newBlogWithNoLikesBody)
 
     expect(postResponse.status).toBe(200)
 
     const getResponse = await api.get('/api/blogs')
 
-    let blogWithNoLikes = getResponse.body.find(blog => blog.title === newBlogWithNoLikesBody.title)
+    let blogWithNoLikes = getResponse.body.find(blog => blog.title === helper.newBlogWithNoLikesBody.title)
 
     expect(blogWithNoLikes.likes).toBe(0)
   })
 
   test('when title or url are not sent in the body, it returns 400 Bad Request', async() => {
-    const postResponse = await api.post('/api/blogs').send(incorrectBody)
+    const postResponse = await api.post('/api/blogs').send(helper.incorrectBody)
 
     expect(postResponse.status).toBe(400)
   })
@@ -161,7 +93,7 @@ describe('DELETE requests', () => {
 
     const getSecondResponse = await api.get('/api/blogs')
 
-    expect(getSecondResponse.body).toHaveLength(listWithManyBlogs.length - 1)
+    expect(getSecondResponse.body).toHaveLength(helper.listWithManyBlogs.length - 1)
   })
 })
 
@@ -185,7 +117,7 @@ describe('PUT requests', () => {
     
     const putResponse = await api
       .put('/api/blogs/' + blogToUpdate.id)
-      .send(invalidBody)
+      .send(helper.invalidBody)
 
     expect(putResponse.status).toBe(400)
   })
@@ -197,7 +129,7 @@ describe('PUT requests', () => {
     
     const putResponse = await api
       .put('/api/blogs/' + blogToUpdate.id)
-      .send(updatedBody)
+      .send(helper.updatedBody)
 
     expect(putResponse.status).toBe(200)
 
@@ -214,6 +146,7 @@ describe('PUT requests', () => {
     })
   })
 })
+
 afterAll(() => {
   server.close()
   mongoose.connection.close()

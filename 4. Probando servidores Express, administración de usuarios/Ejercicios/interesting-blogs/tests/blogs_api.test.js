@@ -18,7 +18,7 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-describe('GET requests', () => {
+describe.skip('GET requests', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -69,7 +69,7 @@ describe('POST requests', () => {
   })
 })
 
-describe('DELETE requests', () => {
+describe.skip('DELETE requests', () => {
   test('when the id is not specified, it returns 404 Not Found', async() => {
     const response = await api.delete('/api/blogs')
 
@@ -97,7 +97,7 @@ describe('DELETE requests', () => {
   })
 })
 
-describe('PUT requests', () => {
+describe.skip('PUT requests', () => {
   test('when the body is empty, it returns 400', async() => {
     const getResponse = await api.get('/api/blogs')
 

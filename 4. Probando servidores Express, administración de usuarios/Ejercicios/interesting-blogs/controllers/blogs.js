@@ -14,25 +14,30 @@ blogsRouter.post('/', async(request, response, next) => {
 
   const user = await User.findById(body.userId)
 
-  const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes || 0,
-    user: user._id
-  })
-
-  try {
-    const savedBlog = await blog.save()
-    
-    user.blogs = user.blogs.concat(savedBlog._id)
-    await user.save()
-    
-    response.json(savedBlog)
+  if (!user) {
+    response.status(400).json({ error: 'invalid userId'})
   } 
-  catch(error) {
-    next(error)
-  }
+  else {
+    const blog = new Blog({
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes || 0,
+      user: user._id
+    })
+  
+    try {
+      const savedBlog = await blog.save()
+      
+      user.blogs = user.blogs.concat(savedBlog._id)
+      await user.save()
+      
+      response.json(savedBlog)
+    } 
+    catch(error) {
+      next(error)
+    }
+  } 
 })
 
 blogsRouter.put('/:id', async(request, response, next) => {

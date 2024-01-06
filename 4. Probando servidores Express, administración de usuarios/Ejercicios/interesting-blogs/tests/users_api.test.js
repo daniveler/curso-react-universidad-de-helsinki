@@ -17,6 +17,14 @@ describe('when there is initially one user in db', () => {
     await user.save()
   })
 
+  test('get request returns the user correctly', async () => {
+    const users = await api.get('/api/users')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(users.body[0].username).toBe('root')
+  })
+
   test('creation succeeds with a fresh username', async () => {
     const usersAtStart = await helper.usersInDb()
 

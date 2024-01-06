@@ -62,7 +62,7 @@ describe('POST requests', () => {
     expect(blogWithNoLikes.likes).toBe(0)
   })
 
-  test('when title or url are not sent in the body, it returns 400 Bad Request', async() => {
+  test('when title, url or userId are not sent in the body, it returns 400 Bad Request', async() => {
     const postResponse = await api.post('/api/blogs').send(helper.incorrectBody)
 
     expect(postResponse.status).toBe(400)

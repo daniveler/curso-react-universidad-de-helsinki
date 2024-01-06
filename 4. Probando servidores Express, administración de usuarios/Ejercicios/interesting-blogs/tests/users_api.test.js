@@ -28,14 +28,9 @@ describe('success requests', () => {
   test('post request for a new valid user', async () => {
     const usersAtStart = await helper.usersInDb()
 
-    const newUser = {
-      username: 'daniveler',
-      name: 'Daniel Velerdas',
-      password: 'examplepassword',
-    }
 
     await api
-      .post('/api/users').send(newUser)
+      .post('/api/users').send(helper.newUser)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -43,7 +38,7 @@ describe('success requests', () => {
     expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
     const usernames = usersAtEnd.map(u => u.username)
-    expect(usernames).toContain(newUser.username)
+    expect(usernames).toContain(helper.newUser.username)
   })
 })
 
@@ -51,14 +46,9 @@ describe('when the user is invalid, returns 400 if', () => {
   test('too short username', async() => {
     const usersAtStart = await helper.usersInDb()
 
-    const newUserWrongUserName = {
-      username: 'da',
-      name: 'Daniel Velerdas',
-      password: 'examplepassword',
-    }
 
     await api.post('/api/users')
-      .send(newUserWrongUserName)
+      .send(helper.newUserWrongUserName)
       .expect(400)
 
     const usersAtEnd = await helper.usersInDb()
@@ -68,14 +58,8 @@ describe('when the user is invalid, returns 400 if', () => {
   test('not unique username', async() => {
     const usersAtStart = await helper.usersInDb()
 
-    const newUserNotUnique = {
-      username: 'root',
-      name: 'Rootencio',
-      password: 'examplepassword',
-    } 
-
     await api.post('/api/users')
-      .send(newUserNotUnique)
+      .send(helper.newUserNotUnique)
       .expect(400)
 
     const usersAtEnd = await helper.usersInDb()
@@ -85,14 +69,8 @@ describe('when the user is invalid, returns 400 if', () => {
   test('too short password', async() => {
     const usersAtStart = await helper.usersInDb()
 
-    const newUserWrongPass = {
-      username: 'daniveler',
-      name: 'Daniel Velerdas',
-      password: 'ex',
-    }
-
     await api.post('/api/users')
-      .send(newUserWrongPass)
+      .send(helper.newUserWrongPass)
       .expect(400)
     
       const usersAtEnd = await helper.usersInDb()

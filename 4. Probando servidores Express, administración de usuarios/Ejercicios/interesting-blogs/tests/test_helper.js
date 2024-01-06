@@ -66,7 +66,31 @@ const listWithManyBlogs = [
     url: "https://newreactpatterns.com/",
     likes: 200,
   }
-  
+
+  const newUser = {
+    username: 'daniveler',
+    name: 'Daniel Velerdas',
+    password: 'examplepassword',
+  }
+
+  const newUserNotUnique = {
+    username: 'root',
+    name: 'Rootencio',
+    password: 'examplepassword',
+  } 
+
+
+  const newUserWrongUserName = {
+    username: 'da',
+    name: 'Daniel Velerdas',
+    password: 'examplepassword',
+  }
+    
+  const newUserWrongPass = {
+    username: 'daniveler',
+    name: 'Daniel Velerdas',
+    password: 'ex',
+  }
 
 const usersInDb = async () => {
   const users = await User.find({})
@@ -80,5 +104,9 @@ module.exports = {
   incorrectBody,
   invalidBody,
   updatedBody,
+  newUser,
+  newUserNotUnique,
+  newUserWrongUserName,
+  newUserWrongPass,
   usersInDb,
 }

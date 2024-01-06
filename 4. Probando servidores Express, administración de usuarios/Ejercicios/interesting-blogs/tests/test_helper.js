@@ -101,6 +101,21 @@ const listWithManyBlogs = [
     password: 'ex',
   }
 
+  const loginWrongUser = {
+    username: 'perico',
+    password: 'pericopass'
+  } 
+
+  const loginWrongPass = {
+    username: 'daniveler',
+    password: 'pericopass'
+  }
+
+  const loginSuccess = {
+    username: 'daniveler',
+    password: 'examplepassword'
+  }
+
 const usersInDb = async () => {
   const users = await User.find({})
   return users.map(u => u.toJSON())
@@ -117,5 +132,8 @@ module.exports = {
   newUserNotUnique,
   newUserWrongUserName,
   newUserWrongPass,
+  loginWrongUser,
+  loginWrongPass,
+  loginSuccess,
   usersInDb,
 }

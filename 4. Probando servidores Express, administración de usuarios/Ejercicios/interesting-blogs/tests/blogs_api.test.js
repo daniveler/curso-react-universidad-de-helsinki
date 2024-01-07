@@ -5,6 +5,8 @@ const { server } = require('../index')
 const Blog = require('../models/blog')
 const api = supertest(app)
 const helper = require('./test_helper')
+const User = require('../models/user')
+const bcryptjs = require('bcryptjs')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -16,6 +18,13 @@ beforeEach(async () => {
   // Converts all promises returned by blog.save() into an unique promise
   // As all promises are proccessed in parallel, the order will be different with each execution
   await Promise.all(promiseArray)
+
+  await User.deleteMany({})
+
+  const passwordHash = await bcryptjs.hash('examplepassword', 10)
+  const user = new User({ username: 'daniveler', passwordHash })
+
+  await user.save()
 })
 
 describe('GET requests', () => {
@@ -41,11 +50,12 @@ describe('GET requests', () => {
 
 describe('POST requests', () => {
   test('when a blog is created it is correctly saved in database', async() => {
-    const getUsersResponse = await api.get('/api/users')
+    const postLoginResponse = await api.post('/api/login')
+      .send(helper.loginSuccess)
 
-    helper.newBlogBody.userId = getUsersResponse.body[0].id
-
-    const postResponse = await api.post('/api/blogs').send(helper.newBlogBody)
+    const postResponse = await api.post('/api/blogs')
+      .set('authorization', 'Bearer ' + postLoginResponse.body.token)
+      .send(helper.newBlogBody)
 
     expect(postResponse.status).toBe(200)
 
@@ -55,11 +65,12 @@ describe('POST requests', () => {
   })
 
   test('when the property likes is not sent body, the blog has 0 likes by default', async() => {
-    const getUsersResponse = await api.get('/api/users')
+    const postLoginResponse = await api.post('/api/login')
+      .send(helper.loginSuccess)
 
-    helper.newBlogWithNoLikesBody.userId = getUsersResponse.body[0].id
-
-    const postResponse = await api.post('/api/blogs').send(helper.newBlogWithNoLikesBody)
+    const postResponse = await api.post('/api/blogs')
+      .set('authorization', 'Bearer ' + postLoginResponse.body.token)
+      .send(helper.newBlogWithNoLikesBody)
 
     expect(postResponse.status).toBe(200)
 
@@ -71,7 +82,12 @@ describe('POST requests', () => {
   })
 
   test('when title, url or userId are not sent in the body, it returns 400 Bad Request', async() => {
-    const postResponse = await api.post('/api/blogs').send(helper.incorrectBody)
+    const postLoginResponse = await api.post('/api/login')
+    .send(helper.loginSuccess)
+
+  const postResponse = await api.post('/api/blogs')
+    .set('authorization', 'Bearer ' + postLoginResponse.body.token)
+    .send(helper.incorrectBody)
 
     expect(postResponse.status).toBe(400)
   })

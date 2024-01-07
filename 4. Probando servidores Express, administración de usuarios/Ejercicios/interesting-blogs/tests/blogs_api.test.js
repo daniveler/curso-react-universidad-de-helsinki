@@ -41,6 +41,10 @@ describe('GET requests', () => {
 
 describe('POST requests', () => {
   test('when a blog is created it is correctly saved in database', async() => {
+    const getUsersResponse = await api.get('/api/users')
+
+    helper.newBlogBody.userId = getUsersResponse.body[0].id
+
     const postResponse = await api.post('/api/blogs').send(helper.newBlogBody)
 
     expect(postResponse.status).toBe(200)
@@ -51,6 +55,10 @@ describe('POST requests', () => {
   })
 
   test('when the property likes is not sent body, the blog has 0 likes by default', async() => {
+    const getUsersResponse = await api.get('/api/users')
+
+    helper.newBlogWithNoLikesBody.userId = getUsersResponse.body[0].id
+
     const postResponse = await api.post('/api/blogs').send(helper.newBlogWithNoLikesBody)
 
     expect(postResponse.status).toBe(200)

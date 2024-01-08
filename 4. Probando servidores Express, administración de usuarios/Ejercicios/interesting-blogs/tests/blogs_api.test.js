@@ -49,6 +49,20 @@ describe('GET requests', () => {
 })
 
 describe('POST requests', () => {
+  test('when the authorization header is not sent, returns 401', async() => {
+    const postResponse = await api.post('/api/blogs')
+      .send(helper.newBlogBody)
+
+    expect(postResponse.status).toBe(401)
+  })
+
+  test('when the token sent is invalid, returns 401', async() => {
+    const postResponse = await api.post('/api/blogs')
+      .set('authorization', 'Bearer ' + "invalidToken")
+      .send(helper.newBlogBody)
+
+    expect(postResponse.status).toBe(401)
+  })
   test('when a blog is created it is correctly saved in database', async() => {
     const postLoginResponse = await api.post('/api/login')
       .send(helper.loginSuccess)

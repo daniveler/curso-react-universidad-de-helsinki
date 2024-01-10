@@ -28,6 +28,7 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
+// This middleware only gets the authorization header (if exists) and put it in request.token in every request
 const tokenExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
 

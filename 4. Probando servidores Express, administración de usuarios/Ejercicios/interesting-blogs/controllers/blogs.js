@@ -12,7 +12,6 @@ blogsRouter.get('/', async(request, response) => {
 
 blogsRouter.post('/', async(request, response, next) => {
   const body = request.body
-
   const token = request.token
 
   if (!token) {
@@ -73,14 +72,43 @@ blogsRouter.put('/:id', async(request, response, next) => {
 })
 
 blogsRouter.delete('/:id', async(request, response, next) => {
-  const idToDelete = request.params.id
+  const token = request.token
+
+  if (!token) {
+    return response.status(401).json({ error: 'token missing' })
+  }
+  
+  let decodedToken = ''
 
   try {
-    const deletedBlog = await Blog.findByIdAndDelete(idToDelete)
-    response.status(204).end()
+    decodedToken = jwt.verify(token, process.env.SECRET)
   }
   catch(error) {
-    next(error)
+    response.status(401).json({ error: 'token invalid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
+
+  if (!user) {
+    response.status(400).json({ error: 'invalid userId'})
+  }
+
+  try {
+    const idToDelete = request.params.id
+
+    const blogToDelete = await Blog.findById(idToDelete)
+
+    if (blogToDelete.user._id.toString() !== decodedToken.id) {
+      response.status(403).json({ error: 'logged user has no permission to delete the blog' })
+    }
+    else {
+      await Blog.findByIdAndDelete(idToDelete)
+      response.status(204).end()
+    }
+
+  }
+  catch(error) {
+    response.status(404).json({ error: 'the blog with provided id does not exist' })
   }
 })
 

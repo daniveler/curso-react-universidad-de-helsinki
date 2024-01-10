@@ -201,7 +201,7 @@ describe('DELETE requests', () => {
   })
 })
 
-describe.skip('PUT requests', () => {
+describe('PUT requests', () => {
   test('when the body is empty, it returns 400', async() => {
     const getResponse = await api.get('/api/blogs')
 
@@ -241,13 +241,11 @@ describe.skip('PUT requests', () => {
 
     const blogUpdated = secondGetResponse.body.find(blog => blog.id === blogToUpdate.id)
 
-    expect(blogUpdated).toEqual({
-      id: blogToUpdate.id,
-      title: "New React patterns",
-      author: "Michael Chan",
-      url: "https://newreactpatterns.com/",
-      likes: 200,
-    })
+    expect(blogUpdated.id).toEqual(blogToUpdate.id)
+    expect(blogUpdated.title).toEqual("New React patterns")
+    expect(blogUpdated.author).toEqual("Michael Chan")
+    expect(blogUpdated.url).toEqual("https://newreactpatterns.com/")
+    expect(blogUpdated.likes).toBe(200)
   })
 })
 

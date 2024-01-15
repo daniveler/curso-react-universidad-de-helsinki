@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogsService from './services/blogs'
 import loginService from './services/login'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 
 
 const App = () => {
@@ -31,9 +34,10 @@ const App = () => {
       })
 
       if (!user) {
-        alert('Wrong credentials')
+        toast.error('Wrong credentials')
       } 
       else {
+        toast.success('Login succeded!')
         setUser(user)
         localStorage.setItem('user', JSON.stringify(user))
         setUsername('')
@@ -41,7 +45,7 @@ const App = () => {
       } 
     }
     catch (exception) {
-      alert('Wrong credentials')
+      toast.error('Login failed: Wrong username or password')
       console.log(exception)
     }
   }
@@ -51,6 +55,7 @@ const App = () => {
 
     setUser(null)
     localStorage.removeItem('user')
+    toast.info('User logged out')
   }
 
   const handleCreateNewBlog = async (event) => {
@@ -63,6 +68,8 @@ const App = () => {
     }
 
     blogsService.createNewBlog(newBlog, user.token)
+
+    toast.success('New blog created!')
   } 
 
   const loginForm = () => (
@@ -138,6 +145,19 @@ const App = () => {
   return (
     <div>
       <h1>Interesting Blogs</h1>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition: Bounce
+        />
       { 
         !user ? loginForm() 
           : 

@@ -6,7 +6,6 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [ErrorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -15,6 +14,8 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
+
+    setUser(JSON.parse(localStorage.getItem('user')))
   }, [])
 
   const handleLogin = async (event) => {
@@ -31,6 +32,7 @@ const App = () => {
       } 
       else {
         setUser(user)
+        localStorage.setItem('user', JSON.stringify(user))
         setUsername('')
         setPassword('')
       } 
@@ -39,6 +41,13 @@ const App = () => {
       alert('Wrong credentials')
       console.log(exception)
     }
+  }
+
+  const handleLogout = (event) => {
+    event.preventDefault()
+
+    setUser(null)
+    localStorage.removeItem('user')
   }
 
   const loginForm = () => (
@@ -80,10 +89,16 @@ const App = () => {
       { 
         !user ? loginForm() 
           : 
-            <div>
-              <p>{user.name} logged in</p>
-              { blogsList(blogs) } 
-            </div>
+            <>
+              <div>
+                <p>{user.name} logged in</p>
+                <button onClick={handleLogout}>Log Out</button>
+              </div>
+              <br></br>
+              <div>
+                { blogsList(blogs) } 
+              </div>
+            </>
       }
     </div>
   )

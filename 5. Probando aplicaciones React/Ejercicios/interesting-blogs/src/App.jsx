@@ -98,6 +98,9 @@ const App = () => {
                   newBlogTitle={newBlogTitle}
                   newBlogAuthor={newBlogAuthor}
                   newBlogUrl={newBlogUrl}
+                  handleNewBlogTitleChange={({ target }) => setNewBlogTitle(target.value)}
+                  handleNewBlogAuthorChange={({ target }) => setNewBlogAuthor(target.value)}
+                  handleNewBlogUrlChange={({ target }) => setNewBlogUrl(target.value)}
                   handleCreateNewBlog={handleCreateNewBlog}
                 />
               </div>

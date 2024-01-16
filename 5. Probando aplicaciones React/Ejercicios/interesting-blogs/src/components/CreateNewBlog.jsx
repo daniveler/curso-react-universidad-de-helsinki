@@ -9,7 +9,7 @@ const CreateNewBlog = (props) => (
           value={props.newBlogTitle}
           name='Title'
           required
-          onChange={({ target }) => setNewBlogTitle(target.value)}
+          onChange={props.handleNewBlogTitleChange}
           />
         <label>Author: </label>
         <input 
@@ -17,7 +17,7 @@ const CreateNewBlog = (props) => (
           value={props.newBlogAuthor}
           name='Author'
           required
-          onChange={({ target }) => setNewBlogAuthor(target.value)}
+          onChange={props.handleNewBlogAuthorChange}
           />
         <label>Url: </label>
         <input 
@@ -25,7 +25,7 @@ const CreateNewBlog = (props) => (
           value={props.newBlogUrl}
           name='Url'
           required
-          onChange={({ target }) => setNewBlogUrl(target.value)}
+          onChange={props.handleNewBlogUrlChange}
           />
       </div>
       <div>

@@ -1,9 +1,20 @@
 import Blog from './Blog' 
 
-const BlogsList = (props) => (
-  props.blogs.map(blog =>
-    <Blog key={blog.id} blog={blog} />
+const BlogsList = (props) => {
+  
+  return (
+    <>
+      <h2>Blogs List</h2>
+
+      <div>
+        {props.blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} />
+        )}
+      </div>
+    </>
+    
   )
-)
+}
+  
 
 export default BlogsList

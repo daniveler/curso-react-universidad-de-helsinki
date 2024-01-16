@@ -48,7 +48,6 @@ const App = () => {
     }
     catch (exception) {
       toast.error('Login failed: Wrong username or password')
-      console.log(exception)
     }
   }
 

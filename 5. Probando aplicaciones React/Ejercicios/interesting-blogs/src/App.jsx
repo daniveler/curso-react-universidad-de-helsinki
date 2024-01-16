@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import LoginForm from './components/LoginForm'
 import BlogsList from './components/BlogsList'
 import CreateNewBlog from './components/CreateNewBlog'
+import Togglable from './components/Toggable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -77,12 +78,13 @@ const App = () => {
       <h1>Interesting Blogs</h1>
       { 
         !user 
-          ? <LoginForm 
-              username={username}
-              password={password}
-              handleLogin={handleLogin}
-              handleUsernameChange={({ target }) => setUsername(target.value)}
-              handlePasswordChange={({ target }) => setPassword(target.value)}
+          ? 
+            <LoginForm 
+                username={username}
+                password={password}
+                handleLogin={handleLogin}
+                handleUsernameChange={({ target }) => setUsername(target.value)}
+                handlePasswordChange={({ target }) => setPassword(target.value)}
             />
           : 
             <>
@@ -94,15 +96,18 @@ const App = () => {
                 <BlogsList blogs={blogs} /> 
               </div>
               <div>
-                <CreateNewBlog 
-                  newBlogTitle={newBlogTitle}
-                  newBlogAuthor={newBlogAuthor}
-                  newBlogUrl={newBlogUrl}
-                  handleNewBlogTitleChange={({ target }) => setNewBlogTitle(target.value)}
-                  handleNewBlogAuthorChange={({ target }) => setNewBlogAuthor(target.value)}
-                  handleNewBlogUrlChange={({ target }) => setNewBlogUrl(target.value)}
-                  handleCreateNewBlog={handleCreateNewBlog}
-                />
+                <Togglable buttonLabel='Create New Blog'>
+                  <CreateNewBlog 
+                    newBlogTitle={newBlogTitle}
+                    newBlogAuthor={newBlogAuthor}
+                    newBlogUrl={newBlogUrl}
+                    handleNewBlogTitleChange={({ target }) => setNewBlogTitle(target.value)}
+                    handleNewBlogAuthorChange={({ target }) => setNewBlogAuthor(target.value)}
+                    handleNewBlogUrlChange={({ target }) => setNewBlogUrl(target.value)}
+                    handleCreateNewBlog={handleCreateNewBlog}
+                  />
+                </Togglable>
+                
               </div>
             </>
       }

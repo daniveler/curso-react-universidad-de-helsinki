@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import blogsService from './services/blogs'
 import loginService from './services/login'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
-
+import LoginForm from './components/LoginForm'
+import BlogsList from './components/BlogsList'
+import CreateNewBlog from './components/CreateNewBlog'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -26,15 +26,15 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-
+  
     try {
       const user = await loginService.login({
         username,
         password
       })
-
+  
       if (!user) {
-        toast.error('Wrong credentials')
+        toast.error('Login failed: Wrong username or password')
       } 
       else {
         toast.success('Login succeded!')
@@ -72,79 +72,37 @@ const App = () => {
     toast.success('New blog created!')
   } 
 
-  const loginForm = () => (
-    <div>
-      <h2>Log in to see your Blogs</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Username: </label>
-          <input
-            type='text'
-            value={username}
-            name='Username'
-            onChange={({ target }) => setUsername(target.value)} />
-        </div>
-        <div>
-          <label>Password: </label>
-          <input
-            type='password'
-            value={password}
-            name='Password'
-            onChange={({ target }) => setPassword(target.value)} />
-        </div>
-        <div>
-          <button type="submit">Log In</button>
-        </div>
-      </form>
-    </div>
-  )
-
-  const blogsList = (blogs) => (
-    blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
-    )
-  )
-
-  const createNewBlog = () => (
-    <div>
-      <h2>Create new Blog</h2>
-      <form onSubmit={handleCreateNewBlog}>
-        <div>
-          <label>Title: </label>
-          <input 
-            type='text'
-            value={newBlogTitle}
-            name='Title'
-            required
-            onChange={({ target }) => setNewBlogTitle(target.value)}
-            />
-          <label>Author: </label>
-          <input 
-            type='text'
-            value={newBlogAuthor}
-            name='Author'
-            required
-            onChange={({ target }) => setNewBlogAuthor(target.value)}
-            />
-          <label>Url: </label>
-          <input 
-            type='url'
-            value={newBlogUrl}
-            name='Url'
-            required
-            onChange={({ target }) => setNewBlogUrl(target.value)}
-            />
-        </div>
-        <div>
-          <button type='submit'>Create Blog</button>
-        </div>
-      </form>
-    </div>
-  ) 
-
   return (
     <div>
       <h1>Interesting Blogs</h1>
+      { 
+        !user 
+          ? <LoginForm 
+              username={username}
+              password={password}
+              handleLogin={handleLogin}
+              handleUsernameChange={({ target }) => setUsername(target.value)}
+              handlePasswordChange={({ target }) => setPassword(target.value)}
+            />
+          : 
+            <>
+              <div>
+                <p>{user.name} logged in</p>
+                <button onClick={handleLogout}>Log Out</button>
+              </div>
+              <div>
+                <BlogsList blogs={blogs} /> 
+              </div>
+              <div>
+                <CreateNewBlog 
+                  newBlogTitle={newBlogTitle}
+                  newBlogAuthor={newBlogAuthor}
+                  newBlogUrl={newBlogUrl}
+                  handleCreateNewBlog={handleCreateNewBlog}
+                />
+              </div>
+            </>
+      }
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
@@ -158,22 +116,6 @@ const App = () => {
         theme="colored"
         transition: Bounce
         />
-      { 
-        !user ? loginForm() 
-          : 
-            <>
-              <div>
-                <p>{user.name} logged in</p>
-                <button onClick={handleLogout}>Log Out</button>
-              </div>
-              <div>
-                { blogsList(blogs) } 
-              </div>
-              <div>
-                { createNewBlog() } 
-              </div>
-            </>
-      }
     </div>
   )
 }

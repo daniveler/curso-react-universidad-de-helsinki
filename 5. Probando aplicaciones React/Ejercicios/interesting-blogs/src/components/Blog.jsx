@@ -21,7 +21,7 @@ const Blog = (props) => {
     setVisible(!visible)
   }
 
-  const handleLike = (blog, likes) => {
+  const handleLike = async(blog, likes) => {
     const updatedBody = {
       title: blog.title,
       author: blog.author,
@@ -31,13 +31,7 @@ const Blog = (props) => {
 
     setLikes(likes + 1)
 
-    blogsService.updateBlog(blog.id, updatedBody)
-  }
-
-  const handleDelete = (blog, token) => {
-    if (window.confirm(`Are you sure you want to delete ${blog.title} from blogs list?`)) {
-      blogsService.deleteBlog(blog.id, token)
-    }
+    await blogsService.updateBlog(blog.id, updatedBody)
   }
   
   return (
@@ -58,7 +52,7 @@ const Blog = (props) => {
           <button onClick={() => handleLike(props.blog, likes)}>Like ♥️</button>
         </div>
         <div>
-          <button onClick={() => handleDelete(props.blog, props.user.token) }>Delete</button>
+          <button onClick={() => props.handleDelete(props.blog, props.user.token) }>Delete</button>
         </div>
       </div>
     </>

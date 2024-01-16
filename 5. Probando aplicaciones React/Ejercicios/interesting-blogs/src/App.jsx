@@ -16,6 +16,7 @@ const App = () => {
   const [newBlogTitle, setNewBlogTitle] = useState('')
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
+  const [updateBlogsTrigger, setUpdateBlogsTrigger] = useState(false)
 
   useEffect(() => {
     blogsService.getAll().then(blogs =>
@@ -23,7 +24,7 @@ const App = () => {
     )
 
     setUser(JSON.parse(localStorage.getItem('user')))
-  }, [])
+  }, [updateBlogsTrigger])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -68,10 +69,21 @@ const App = () => {
       url: newBlogUrl
     }
 
-    blogsService.createNewBlog(newBlog, user.token)
-
+    await blogsService.createNewBlog(newBlog, user.token)
+    setUpdateBlogsTrigger(prev => !prev)
+    setNewBlogTitle('')
+    setNewBlogAuthor('')
+    setNewBlogUrl('')
     toast.success('New blog created!')
   } 
+
+  const handleDelete = async(blog, token) => {
+    if (window.confirm(`Are you sure you want to delete ${blog.title} from blogs list?`)) {
+      await blogsService.deleteBlog(blog.id, token)
+      setUpdateBlogsTrigger(prev => !prev)
+      toast.success(`Blog ${blog.title} has been succesfully deleted`)
+    }
+  }
 
   return (
     <div>
@@ -93,7 +105,11 @@ const App = () => {
                 <button onClick={handleLogout}>Log Out</button>
               </div>
               <div>
-                <BlogsList blogs={blogs} user={user}/> 
+                <BlogsList 
+                  blogs={blogs} 
+                  user={user}
+                  handleDelete={handleDelete}
+                /> 
               </div>
               <div>
                 <Togglable buttonLabel='Create New Blog'>

@@ -8,7 +8,12 @@ const BlogsList = (props) => {
       <h2>Blogs List</h2>
       <div>
         {orderedBlogs(props.blogs).map(blog =>
-          <Blog key={blog.id} blog={blog} user={props.user}/>
+          <Blog 
+            key={blog.id} 
+            blog={blog} 
+            user={props.user} 
+            handleDelete={props.handleDelete}
+          />
         )}
       </div>
     </>

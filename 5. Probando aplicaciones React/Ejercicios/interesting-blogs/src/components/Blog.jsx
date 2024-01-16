@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
+import blogsService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = (props) => {
   const blogStyle = {
     paddingTop: 10,
     paddingBottom: 10,
@@ -12,7 +12,7 @@ const Blog = ({ blog }) => {
   }
 
   const [visible, setVisible] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
+  const [likes, setLikes] = useState(props.blog.likes)
 
   const hideWhenVisible = { ...blogStyle, display: visible ? 'none' : '' }
   const showWhenVisible = { ...blogStyle, display: visible ? '' : 'none' }
@@ -31,24 +31,35 @@ const Blog = ({ blog }) => {
 
     setLikes(likes + 1)
 
-    blogService.updateBlog(blog.id, updatedBody)
+    blogsService.updateBlog(blog.id, updatedBody)
+  }
+
+  const handleDelete = (blog, token) => {
+    if (window.confirm(`Are you sure you want to delete ${blog.title} from blogs list?`)) {
+      blogsService.deleteBlog(blog.id, token)
+    }
   }
   
   return (
     <>
       <div style={hideWhenVisible}>
-        {blog.title} {blog.author}
+        {props.blog.title} {props.blog.author}
         <button onClick={toggleVisibility}>Show details</button>
       </div>  
       <div style={showWhenVisible}>
-        <div>{blog.title}</div>
-        <div>{blog.author}</div>
-        <div>{blog.url}</div>
+        <div>
+          {props.blog.title}
+          <button onClick={toggleVisibility}>Hide details</button>
+        </div>
+        <div>{props.blog.author}</div>
+        <div>{props.blog.url}</div>
         <div>
           {likes}
-          <button onClick={() => { handleLike(blog, likes) }}>Like ♥️</button>
+          <button onClick={() => handleLike(props.blog, likes)}>Like ♥️</button>
         </div>
-        <button onClick={toggleVisibility}>Hide details</button>
+        <div>
+          <button onClick={() => handleDelete(props.blog, props.user.token) }>Delete</button>
+        </div>
       </div>
     </>
   )

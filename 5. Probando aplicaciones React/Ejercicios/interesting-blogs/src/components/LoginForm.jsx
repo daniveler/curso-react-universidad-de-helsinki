@@ -30,7 +30,6 @@ const LoginForm = (props) => (
 LoginForm.propTypes = {
   username: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
   handleLogin: PropTypes.func.isRequired,
   handleUsernameChange: PropTypes.func.isRequired,
   handlePasswordChange: PropTypes.func.isRequired,

@@ -27,7 +27,7 @@ const LoginForm = (props) => (
   </div>
 )
 
-LoginForm.PropTypes = {
+LoginForm.propTypes = {
   username: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,

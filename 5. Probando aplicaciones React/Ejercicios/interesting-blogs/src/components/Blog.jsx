@@ -35,7 +35,7 @@ const Blog = (props) => {
   }
   
   return (
-    <>
+    <div className='blog'>
       <div style={hideWhenVisible}>
         {props.blog.title} {props.blog.author}
         <button onClick={toggleVisibility}>Show details</button>
@@ -55,7 +55,7 @@ const Blog = (props) => {
           <button onClick={() => props.handleDelete(props.blog, props.user.token) }>Delete</button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

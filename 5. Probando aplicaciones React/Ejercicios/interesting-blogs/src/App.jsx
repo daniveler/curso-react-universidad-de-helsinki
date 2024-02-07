@@ -137,7 +137,7 @@ const App = () => {
         draggable
         pauseOnHover
         theme="colored"
-        transition: Bounce
+        // transition="Bounce"
         />
     </div>
   )

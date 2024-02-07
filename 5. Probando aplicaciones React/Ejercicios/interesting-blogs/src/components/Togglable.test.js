@@ -1,10 +1,11 @@
 import React from 'react'
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { render, fireEvent } from '@testing-library/react'
-import { prettyDOM } from '@testing-library/dom'
-import Togglable from './Toggable'
+import Togglable from './Togglable'
 
 describe('<Togglable />', () => {
+  let component 
+  
   beforeEach(() => {
     component = render(
       <Togglable buttonLabel="Show ...">
@@ -14,9 +15,8 @@ describe('<Togglable />', () => {
   })
 
   test('renders its children', () => {
-    expect(
-      component.container.querySelector('.testDiv').toBeDefined()
-    )
+    expect(component.container.querySelector('.testDiv'))
+      .toBeDefined()
   })
 
   test('at start the children are not displayed', () => {
@@ -34,10 +34,10 @@ describe('<Togglable />', () => {
   })
 
   test('toggled content can be closed', () => {
-    const button = component.getByText('Show...')
+    const button = component.getByText('Show ...')
     fireEvent.click(button)
   
-    const closeButton = component.getByText('cancel')
+    const closeButton = component.getByText('Cancel')
 
     fireEvent.click(closeButton)
   

@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import LoginForm from './components/LoginForm'
 import BlogsList from './components/BlogsList'
 import CreateNewBlog from './components/CreateNewBlog'
-import Togglable from './components/Toggable'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])

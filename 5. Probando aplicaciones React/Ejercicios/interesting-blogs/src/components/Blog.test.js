@@ -16,15 +16,12 @@ test('renders content', () => {
     <Blog blog={blog} />
   )
 
-  const titleElement = component.getByText(blog.title)
-  const authorElement = component.getByText(blog.author)
-  const urlElement = component.getByText(blog.url)
-  const likesElement = component.getByText(blog.likes)
-  
-  expect(titleElement).toBeDefined()
-  expect(authorElement).toBeDefined()
-  expect(urlElement).toBeUndefined()
-  expect(likesElement).toBeUndefined()
+
+  const shownContent = component.container.querySelector('.shownContent')
+  expect(shownContent).not.toHaveStyle('display: none')
+
+  const hiddenContent = component.container.querySelector('.hiddenContent')
+  expect(hiddenContent).toHaveStyle('display: none')
 })
 
 test.skip('clicking the button calls event handler once', () => {

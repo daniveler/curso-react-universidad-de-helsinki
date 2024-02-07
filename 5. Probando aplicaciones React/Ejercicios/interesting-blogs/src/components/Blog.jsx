@@ -38,7 +38,7 @@ const Blog = (props) => {
     <div className='blog'>
       <div style={hideWhenVisible} className='shownContent'>
         {props.blog.title} {props.blog.author}
-        <button onClick={toggleVisibility}>Show details</button>
+        <button onClick={toggleVisibility} className='showDetailsButton'>Show details</button>
       </div>  
       <div style={showWhenVisible} className='hiddenContent'>
         <div>

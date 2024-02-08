@@ -1,10 +1,11 @@
 const CreateNewBlog = (props) => (
   <div>
     <h2>Create new Blog</h2>
-    <form onSubmit={props.handleCreateNewBlog}>
+    <form id="createBlogForm" onSubmit={props.handleCreateNewBlog}>
       <div>
         <label>Title: </label>
         <input 
+          id="title"
           type='text'
           value={props.newBlogTitle}
           name='Title'
@@ -13,6 +14,7 @@ const CreateNewBlog = (props) => (
           />
         <label>Author: </label>
         <input 
+          id="author"
           type='text'
           value={props.newBlogAuthor}
           name='Author'
@@ -21,6 +23,7 @@ const CreateNewBlog = (props) => (
           />
         <label>Url: </label>
         <input 
+          id="url"
           type='url'
           value={props.newBlogUrl}
           name='Url'

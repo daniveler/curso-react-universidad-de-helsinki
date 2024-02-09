@@ -111,7 +111,7 @@ const App = () => {
                 /> 
               </div>
               <div>
-                <Togglable buttonLabel='Create New Blog'>
+                <Togglable mainButtonId='create-blog-togglable' buttonLabel='Create New Blog'>
                   <CreateNewBlog 
                     newBlogTitle={newBlogTitle}
                     newBlogAuthor={newBlogAuthor}

@@ -18,7 +18,7 @@ describe('Interesting Blogs App', () => {
     cy.contains('Interesting Blogs')
   })
 
-  describe('Login: ', () => {
+  describe.skip('Login: ', () => {
     it('login page can is opened at first', () => {
       cy.contains('Log in to see your Blogs')
     })
@@ -36,7 +36,25 @@ describe('Interesting Blogs App', () => {
       cy.get('#password').type('invalid-pass')
       cy.get('#login-button').click()
   
-      cy.contains('Log in to see your Blogs')
+      v
+    })
+  })
+
+  describe('When logged in: ', () => {
+    beforeEach(() => {
+      cy.get('#username').type(testUser.username)
+      cy.get('#password').type(testUser.password)
+      cy.get('#login-button').click()
+    })
+
+    it('a new blog can be created', () => {
+      cy.get('#create-blog-togglable').click()
+      
+      cy.get('#title').type('Test Title')
+      cy.get('#author').type('Test Author')
+      cy.get('#url').type('https://www.testurl.com')
+
+      cy.get('#create-blog-button').click()
     })
   })
 

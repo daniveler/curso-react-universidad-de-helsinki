@@ -32,7 +32,7 @@ const CreateNewBlog = (props) => (
           />
       </div>
       <div>
-        <button type='submit'>Create Blog</button>
+        <button id='create-blog-button' type='submit'>Create Blog</button>
       </div>
     </form>
   </div>

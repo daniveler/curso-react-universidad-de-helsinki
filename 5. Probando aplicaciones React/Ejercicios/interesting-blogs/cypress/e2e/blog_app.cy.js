@@ -18,7 +18,7 @@ describe('Interesting Blogs App', () => {
     cy.contains('Interesting Blogs')
   })
 
-  describe.skip('Login: ', () => {
+  describe('Login: ', () => {
     it('login page can is opened at first', () => {
       cy.contains('Log in to see your Blogs')
     })
@@ -55,6 +55,16 @@ describe('Interesting Blogs App', () => {
       cy.get('#url').type('https://www.testurl.com')
 
       cy.get('#create-blog-button').click()
+    })
+
+    it('a blog can be liked', () => {
+      cy.get('.showDetailsButton').click()
+      cy.get('.likesNumber').then($likes => {
+        const initialLikes = parseInt($likes.text())
+
+        cy.get('.likeButton').click()
+      cy.get('.likesNumber').should('have.text', (initialLikes + 1).toString())
+      })
     })
   })
 

@@ -48,8 +48,8 @@ const Blog = (props) => {
         <div>{props.blog.author}</div>
         <div>{props.blog.url}</div>
         <div>
-          {likes}
-          <button onClick={() => handleLike(props.blog, likes)}>Like ♥️</button>
+          <span className='likesNumber'>{likes}</span>
+          <button className='likeButton' onClick={() => handleLike(props.blog, likes)}>Like ♥️</button>
         </div>
         <div>
           <button onClick={() => props.handleDelete(props.blog, props.user.token) }>Delete</button>

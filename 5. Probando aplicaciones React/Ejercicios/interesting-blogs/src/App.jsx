@@ -78,7 +78,17 @@ const App = () => {
 
   const handleDelete = async(blog, token) => {
     if (window.confirm(`Are you sure you want to delete ${blog.title} from blogs list?`)) {
-      await blogsService.deleteBlog(blog.id, token)
+      
+      try {
+        await blogsService.deleteBlog(blog.id, token)
+      }
+      catch(error) {
+        if(error.response.status == 403) {
+          toast.error('Actual user does not have permission to delete this blog')
+        }
+
+        return
+      }
       setUpdateBlogsTrigger(prev => !prev)
       toast.success(`Blog ${blog.title} has been succesfully deleted`)
     }
@@ -101,7 +111,7 @@ const App = () => {
             <>
               <div>
                 <p>{user.name} logged in</p>
-                <button onClick={handleLogout}>Log Out</button>
+                <button id="logoutButton" onClick={handleLogout}>Log Out</button>
               </div>
               <div>
                 <BlogsList 

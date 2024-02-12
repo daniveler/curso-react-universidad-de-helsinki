@@ -12,10 +12,22 @@ const otherUser = {
   password: 'examplepassword'
 }
 
-const loginCorrectUser = () => {
-  cy.get('#username').type(testUser.username)
-  cy.get('#password').type(testUser.password)
+const loginAsUser = (user) => {
+  cy.get('#username').type(user.username)
+  cy.get('#password').type(user.password)
   cy.get('#login-button').click()
+}
+
+const createNewBlog = () => {
+  cy.get('#create-blog-togglable').click()
+      
+  cy.get('#title').type('Test Title')
+  cy.get('#author').type('Test Author')
+  cy.get('#url').type('https://www.testurl.com')
+
+  cy.get('#create-blog-button').click()
+
+  cy.get('.blog').should('exist')
 }
 
 describe('Interesting Blogs App', () => {
@@ -38,7 +50,7 @@ describe('Interesting Blogs App', () => {
     })
   
     it('correct user can log in', () => {
-      loginCorrectUser()
+      loginAsUser(testUser)
   
       cy.contains('Daniel Velerdas logged in')
     })
@@ -52,17 +64,11 @@ describe('Interesting Blogs App', () => {
 
   describe('When logged in: ', () => {
     beforeEach(() => {
-     loginCorrectUser()
+     loginAsUser(testUser)
     })
 
     it('a new blog can be created', () => {
-      cy.get('#create-blog-togglable').click()
-      
-      cy.get('#title').type('Test Title')
-      cy.get('#author').type('Test Author')
-      cy.get('#url').type('https://www.testurl.com')
-
-      cy.get('#create-blog-button').click()
+      createNewBlog()
     })
 
     it('a blog can be liked', () => {
@@ -76,6 +82,26 @@ describe('Interesting Blogs App', () => {
     })
 
     it('a blog can be deleted by the user which created it', () => {
+      cy.get('.showDetailsButton').click()
+      cy.get('.deleteButton').click()
+    })
+  })
+
+  describe('When logged in as different user: ', () => {
+    before(() => {
+      cy.request('POST', `${backendBaseUrl}/api/testing/reset`)
+      cy.request('POST', `${backendBaseUrl}/api/users`, testUser)
+      cy.request('POST', `${backendBaseUrl}/api/users`, otherUser)
+    })
+
+    it('a user can not delete blogs which were not created by him', () => {
+      loginAsUser(testUser)
+      createNewBlog()
+
+      cy.get('#logoutButton').click()
+      
+      loginAsUser(otherUser)
+
       cy.get('.showDetailsButton').click()
       cy.get('.deleteButton').click()
     })

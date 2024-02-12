@@ -1,0 +1,43 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "npm: start:test back-end for interesting-blogs",
+			"type": "npm",
+			"script": "start:test",
+			"path": "4. Probando servidores Express, administración de usuarios/Ejercicios/interesting-blogs",
+			"problemMatcher": [],
+			"detail": "cross-env NODE_ENV=test node index.js"
+		},
+		{
+			"label": "npm: start front-end for interesting-blogs",
+			"type": "npm",
+			"script": "start",
+			"path": "5. Probando aplicaciones React/Ejercicios/interesting-blogs",
+			"problemMatcher": [],
+			"detail": "react-scripts start"
+		},
+		{
+			"type": "npm",
+			"script": "cypress:open",
+			"path": "5. Probando aplicaciones React/Ejercicios/interesting-blogs",
+			"problemMatcher": [],
+			"label": "npm: cypress:open interesting-blogs for testing E2E",
+			"detail": "cypress open"
+		},
+		{
+			"label": "Run cypress testing E2E",
+			"type": "shell",
+			"dependsOn": [
+				"npm: start:test back-end for interesting-blogs",
+				"npm: start front-end for interesting-blogs",
+				"npm: cypress:open interesting-blogs for testing E2E"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}

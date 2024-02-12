@@ -35,8 +35,6 @@ describe('Interesting Blogs App', () => {
       cy.get('#username').type('invalid-user')
       cy.get('#password').type('invalid-pass')
       cy.get('#login-button').click()
-  
-      v
     })
   })
 

@@ -104,6 +104,8 @@ describe('Interesting Blogs App', () => {
 
       cy.get('.showDetailsButton').click()
       cy.get('.deleteButton').click()
+
+      cy.get('.blog').should('exist')
     })
   })
 

@@ -33,6 +33,13 @@
 				"npm: cypress:open interesting-blogs for testing E2E"
 			],
 			"problemMatcher": [],
+		},
+		{
+			"label": "Run module 7",
+			"type": "npm",
+			"script": "start",
+			"path": "7. React router, custom hooks, estilando la aplicación con CSS y webpack/Ejercicios/routed-anecdotes",
+			"problemMatcher": [],
 			"group": {
 				"kind": "build",
 				"isDefault": true

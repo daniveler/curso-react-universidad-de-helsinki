@@ -12,22 +12,40 @@ const otherUser = {
   password: 'examplepassword'
 }
 
+const defaultBlog = {
+  title: 'Test Title',
+  author: 'Test Author',
+  url: 'https://www.testurl.com'
+}
+
+const mostLikesBlog = {
+  title: 'Most Liked Blog',
+  author: 'Most Liked Author',
+  url: 'https://www.mostliked.com'
+}
+
 const loginAsUser = (user) => {
   cy.get('#username').type(user.username)
   cy.get('#password').type(user.password)
   cy.get('#login-button').click()
 }
 
-const createNewBlog = () => {
-  cy.get('#create-blog-togglable').click()
-      
-  cy.get('#title').type('Test Title')
-  cy.get('#author').type('Test Author')
-  cy.get('#url').type('https://www.testurl.com')
+const createNewBlog = (blog) => {      
+  cy.get('#title').type(blog.title)
+  cy.get('#author').type(blog.author)
+  cy.get('#url').type(blog.url)
 
   cy.get('#create-blog-button').click()
 
   cy.get('.blog').should('exist')
+}
+
+const giveLikesToBlog = (blogIndex, likesNumber) => {
+  cy.get('.showDetailsButton').eq(blogIndex).click()
+
+  for(let i = 0; i < likesNumber; i++) {
+    cy.get('.likeButton').eq(blogIndex).click()
+  }
 }
 
 describe('Interesting Blogs App', () => {
@@ -68,7 +86,8 @@ describe('Interesting Blogs App', () => {
     })
 
     it('a new blog can be created', () => {
-      createNewBlog()
+      cy.get('#create-blog-togglable').click()
+      createNewBlog(defaultBlog)
     })
 
     it('a blog can be liked', () => {
@@ -85,6 +104,26 @@ describe('Interesting Blogs App', () => {
       cy.get('.showDetailsButton').click()
       cy.get('.deleteButton').click()
     })
+
+    it('when there are multiple blogs, they are sort by likes number', () => {
+      cy.get('#create-blog-togglable').click()
+
+      for(let i = 0; i < 3; i++) {
+        createNewBlog(defaultBlog)
+        cy.wait(500)
+      }  
+
+      createNewBlog(mostLikesBlog)
+      cy.wait(500)
+
+      giveLikesToBlog(1, 5)
+      giveLikesToBlog(2, 7)
+      giveLikesToBlog(3, 25)
+
+      cy.reload()
+
+      cy.get('.blog').eq(0).should('contain', 'Most Liked Blog')
+    })
   })
 
   describe('When logged in as different user: ', () => {
@@ -96,7 +135,9 @@ describe('Interesting Blogs App', () => {
 
     it('a user can not delete blogs which were not created by him', () => {
       loginAsUser(testUser)
-      createNewBlog()
+
+      cy.get('#create-blog-togglable').click()
+      createNewBlog(defaultBlog)
 
       cy.get('#logoutButton').click()
       

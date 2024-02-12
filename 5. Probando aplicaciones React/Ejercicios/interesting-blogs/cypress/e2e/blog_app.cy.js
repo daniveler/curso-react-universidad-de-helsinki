@@ -6,11 +6,25 @@ const testUser = {
   password: 'examplepassword'
 }
 
+const otherUser = {
+  name: 'Other User',
+  username: 'otheruser',
+  password: 'examplepassword'
+}
+
+const loginCorrectUser = () => {
+  cy.get('#username').type(testUser.username)
+  cy.get('#password').type(testUser.password)
+  cy.get('#login-button').click()
+}
+
 describe('Interesting Blogs App', () => {
-  beforeEach(() => {
+  before(() => {
     cy.request('POST', `${backendBaseUrl}/api/testing/reset`)
-    
     cy.request('POST', `${backendBaseUrl}/api/users`, testUser)
+  })
+
+  beforeEach(() => {
     cy.visit('http://localhost:3000')
   })
 
@@ -24,9 +38,7 @@ describe('Interesting Blogs App', () => {
     })
   
     it('correct user can log in', () => {
-      cy.get('#username').type(testUser.username)
-      cy.get('#password').type(testUser.password)
-      cy.get('#login-button').click()
+      loginCorrectUser()
   
       cy.contains('Daniel Velerdas logged in')
     })
@@ -40,9 +52,7 @@ describe('Interesting Blogs App', () => {
 
   describe('When logged in: ', () => {
     beforeEach(() => {
-      cy.get('#username').type(testUser.username)
-      cy.get('#password').type(testUser.password)
-      cy.get('#login-button').click()
+     loginCorrectUser()
     })
 
     it('a new blog can be created', () => {
@@ -61,8 +71,13 @@ describe('Interesting Blogs App', () => {
         const initialLikes = parseInt($likes.text())
 
         cy.get('.likeButton').click()
-      cy.get('.likesNumber').should('have.text', (initialLikes + 1).toString())
+        cy.get('.likesNumber').should('have.text', (initialLikes + 1).toString())
       })
+    })
+
+    it('a blog can be deleted by the user which created it', () => {
+      cy.get('.showDetailsButton').click()
+      cy.get('.deleteButton').click()
     })
   })
 

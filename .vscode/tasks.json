@@ -27,7 +27,6 @@
 		},
 		{
 			"label": "Run cypress testing E2E",
-			"type": "shell",
 			"dependsOn": [
 				"npm: start:test back-end for interesting-blogs",
 				"npm: start front-end for interesting-blogs",

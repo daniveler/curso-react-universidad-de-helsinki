@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Routes, Route
+  Routes, Route, Navigate
 } from 'react-router-dom'
 
 import Header from './components/Header'
@@ -9,6 +9,7 @@ import AnecdoteList from './components/AnecdoteList'
 import About from './components/About'
 import Footer from './components/Footer'
 import CreateNew from './components/CreateNew'
+import Anecdote from './components/Anecdote'
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -55,7 +56,9 @@ const App = () => {
       <Header />
       
       <Routes>
-        <Route path="/" element={ <AnecdoteList anecdotes={anecdotes}/> } />
+        <Route path="/" element={<Navigate replace to="/anecdotes" />} />
+        <Route path="/anecdotes" element={ <AnecdoteList anecdotes={anecdotes}/> } />
+        <Route path="/anecdotes/:id" element={ <Anecdote anecdotes={anecdotes}/> } />
         <Route path="/create" element={<CreateNew addNew={addNew}/> } />
         <Route path="/about" element={ <About /> } />
       </Routes>

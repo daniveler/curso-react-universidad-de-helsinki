@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
-  BrowserRouter as Router,
-  Routes, Route, Navigate
+  Routes, Route, Navigate,
+  useLocation
 } from 'react-router-dom'
+
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import Header from './components/Header'
 import AnecdoteList from './components/AnecdoteList'
@@ -29,7 +32,13 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const location = useLocation()
+
+  useEffect(() => {
+    if(location.state) {
+      toast.success('New anecdote:  ' + location.state.created + ' was created!')
+    }
+  }, [location])
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -51,7 +60,7 @@ const App = () => {
   }
 
   return (
-    <Router>
+    <>
       <h1>Software anecdotes</h1>
       <Header />
       
@@ -64,8 +73,20 @@ const App = () => {
       </Routes>
       
       <Footer />
-    </Router>
-    
+      <ToastContainer
+        id='toast-container'
+        position="bottom-right"
+        autoClose={10000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+    </>
   )
 }
 

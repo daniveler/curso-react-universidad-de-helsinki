@@ -6,6 +6,8 @@ const CreateNew = ({ addNew }) => {
   const author = useField('text')
   const info = useField('text')
 
+  const reset = useField('reset')
+
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
@@ -19,6 +21,14 @@ const CreateNew = ({ addNew }) => {
     })
 
     navigate('/', { state: { created: content.value }})
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+
+    content.onReset()
+    author.onReset()
+    info.onReset()
   }
 
   return (
@@ -39,6 +49,7 @@ const CreateNew = ({ addNew }) => {
         </div>
         <button>create</button>
       </form>
+      <button onClick={handleReset}>reset</button>
     </div>
   )
 }

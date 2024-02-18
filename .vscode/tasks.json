@@ -32,7 +32,7 @@
 				"npm: start front-end for interesting-blogs",
 				"npm: cypress:open interesting-blogs for testing E2E"
 			],
-			"problemMatcher": [],
+			"problemMatcher": []
 		},
 		{
 			"label": "Run module 7",
@@ -40,6 +40,14 @@
 			"script": "start",
 			"path": "7. React router, custom hooks, estilando la aplicación con CSS y webpack/Ejercicios/routed-anecdotes",
 			"problemMatcher": [],
+		},
+		{
+			"type": "npm",
+			"script": "start",
+			"path": "7. React router, custom hooks, estilando la aplicación con CSS y webpack/Ejercicios/country-hook",
+			"problemMatcher": [],
+			"label": "npm: start - 7. React router, custom hooks, estilando la aplicación con CSS y webpack/Ejercicios/country-hook",
+			"detail": "react-scripts start",
 			"group": {
 				"kind": "build",
 				"isDefault": true

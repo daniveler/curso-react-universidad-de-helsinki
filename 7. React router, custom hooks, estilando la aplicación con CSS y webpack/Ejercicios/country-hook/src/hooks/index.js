@@ -18,8 +18,6 @@ export const useField = (type) => {
 export const useCountry = (name) => {
   const [country, setCountry] = useState(name)
 
-  console.log("Name in hook: " + name)
-
   useEffect(() => {
     countriesService.
       getCountryByName(name)

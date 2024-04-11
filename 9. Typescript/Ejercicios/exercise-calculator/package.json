@@ -1,0 +1,19 @@
+{
+  "name": "exercise-calculator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --",
+    "exerciseCalculator": "ts-node exerciseCalculator.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/preset-env": "^7.24.4",
+    "@babel/preset-typescript": "^7.24.1",
+    "@jest/globals": "^29.7.0",
+    "@types/node": "^20.11.28",
+    "jest": "^29.7.0"
+  }
+}

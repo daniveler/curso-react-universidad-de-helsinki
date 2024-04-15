@@ -1,19 +1,20 @@
-type BmiResult = 'underweight' | 'healthy weight' | 'overweight' | 'obesity'
+export type BmiResult = 'underweight' | 'healthy weight' | 'overweight' | 'obesity'
 
-const calculateBmi = (height: number, weight: number) : BmiResult => {
-  const operationResult = weight / height ** 2
+export const calculateBmi = (height: number, weight: number) : BmiResult => {
+  const operationResult: number = weight / height ** 2
 
   if(operationResult < 18.5) 
     return 'underweight'
-  else if (operationResult >= 18.5 && operationResult <= 24.9) 
+  else if (operationResult >= 18.5 && operationResult <= 25) 
     return 'healthy weight'
-  else if (operationResult > 25 && operationResult <= 29.9) 
+  else if (operationResult > 25 && operationResult <= 30) 
     return 'overweight'
   else if (operationResult >= 30) 
     return 'obesity'
   else 
     throw new Error('Error: BMI could not be calculated')
 }
+
 
 interface BmiValues {
   height: number,

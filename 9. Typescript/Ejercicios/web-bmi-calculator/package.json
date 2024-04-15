@@ -7,7 +7,7 @@
     "test": "jest --",
     "start": "ts-node webBmiCalculator.ts",
     "dev": "ts-node-dev webBmiCalculator.ts",
-    "lint": "eslint --ext .ts"
+    "lint": "eslint --ext .ts ."
   },
   "author": "",
   "license": "ISC",

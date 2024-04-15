@@ -4,7 +4,7 @@ enum RatingDescriptions {
   'EXCELLENT' = 'Good job! This is the way!'
 }
 
-interface Result {
+export interface Result {
   periodLength: number,
   trainingDays: number,
   average: number,
@@ -14,7 +14,7 @@ interface Result {
   ratingDescription: RatingDescriptions
 } 
 
-const calculateExercise = (daysList: number[], target: number) : Result => {
+export const calculateExercise = (daysList: number[], target: number) : Result => {
   const periodLength: number = daysList.length
   let trainingDays: number = 0
   let totalTrainingHours: number = 0
@@ -56,5 +56,3 @@ const calculateExercise = (daysList: number[], target: number) : Result => {
     average
   }
 }
-
-module.exports = calculateExercise

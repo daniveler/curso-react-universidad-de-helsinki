@@ -12,8 +12,6 @@ app.get('/bmi', (req: Request, res: Response) => {
   const height: number = parseFloat(req.query.height as string)
   const weight: number = parseFloat(req.query.weight as string)
 
-  console.log(height + ' ' + weight)
-
   let bmi: BmiResult
 
   try {

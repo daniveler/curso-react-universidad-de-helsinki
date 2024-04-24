@@ -1,14 +1,13 @@
 import express, { Router, Request, Response } from 'express'
-import diagnosesService from '../data/diagnoses'
+import diagnosesData from '../data/diagnoses'
 import { Diagnose } from '../data/types'
 
 const diagnosesRouter: Router = express.Router()
 
 diagnosesRouter.get('/', (req: Request, res: Response) => {
-  const diagnoses: Diagnose[] = diagnosesService
+  const diagnoses: Diagnose[] = diagnosesData
   
-  res.status(200).json({ data: diagnoses
-   })
+  res.status(200).send(diagnoses)
 })
 
 export default diagnosesRouter

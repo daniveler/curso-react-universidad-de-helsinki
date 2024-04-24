@@ -1,20 +1,23 @@
 import express, { Router, Request, Response } from 'express'
-import patientsData from '../data/patients'
 import { Patient, PatientNoSsn } from '../data/types'
+import patientService from '../services/patientService'
 
 const patientsRouter: Router = express.Router()
 
 patientsRouter.get('/', (req: Request, res: Response) => {
-  const patients: Patient[] = patientsData
+  const patients: PatientNoSsn[] = patientService.getPatientsNoSsl()
 
-  const response: PatientNoSsn[] = patients.map(({ id, name, dateOfBirth, gender, occupation }) => (
-    {
-      id, name, dateOfBirth, gender, occupation
-    })
-  )
+  res.status(200).send(patients)
+})
 
+patientsRouter.post('/', (req: Request, res: Response) => {
+  const { name, dateOfBirth, ssn, gender, occupation } = req.body
+  
+  const addedPatient: Patient = patientService.addNewPatient({
+    name, dateOfBirth, ssn, gender, occupation
+  })
 
-  res.status(200).send(response)
+  res.json(addedPatient)
 })
 
 export default patientsRouter

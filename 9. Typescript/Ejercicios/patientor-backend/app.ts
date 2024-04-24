@@ -6,6 +6,7 @@ import patientsRouter from './controller/patients'
 const app: Express = express()
 
 app.use(cors())
+app.use(express.json())
 
 app.get('/api/ping', (req: Request, res: Response) => {
   res.send('Pong')

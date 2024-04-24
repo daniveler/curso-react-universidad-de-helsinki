@@ -1,12 +1,10 @@
-import express, { Express, Request, Response } from 'express'
+import http, { Server } from 'http'
+import app from './app'
 
-const app: Express = express()
 const PORT: number = 3001
 
-app.get('/api/ping', (req: Request, res: Response) => {
-  res.status(200).json({ message: 'Pong' })
-})
+const server: Server = http.createServer(app)
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening in http://localhost:${PORT}`)
 })

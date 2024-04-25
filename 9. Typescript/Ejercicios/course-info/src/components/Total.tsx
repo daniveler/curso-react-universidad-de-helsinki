@@ -3,7 +3,7 @@ interface TotalProps {
 }
 
 const Total = (props: TotalProps) => {
-  return <p>Number of exercises: {props.total}</p>
+  return <h2>Number of exercises: {props.total}</h2>
 }
 
 export default Total

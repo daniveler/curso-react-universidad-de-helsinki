@@ -8,6 +8,13 @@ const getDiaries = async () => {
   return response.data
 }
 
+const createDiary = async (newDiary: NewDiaryEntry) => {
+  const response = await axios.post<DiaryEntry[]>(`${baseUrl}/api/diaries`, newDiary)
+
+  return response.data
+}
+
 export default {
-  getDiaries
+  getDiaries,
+  createDiary
 }

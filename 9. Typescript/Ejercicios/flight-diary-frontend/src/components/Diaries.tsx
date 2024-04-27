@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import diariesService from '../services/diaries'
+import { DiariesProps } from "../types"
 
-const Diaries = () => {
-  const [diaries, setDiaries] = useState<DiaryEntry[]>()
-
+const Diaries = (props: DiariesProps) => {
   useEffect(() => {
     diariesService.getDiaries().then((response) => {
-      setDiaries(response)
+      props.setDiaries(response)
     })
   }, [])
 
-  return diaries?.map(diarie => {
+  return props.diaries?.map(diarie => {
       return (
         <>
           <h2>{diarie.date}</h2>

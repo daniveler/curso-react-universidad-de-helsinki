@@ -1,4 +1,4 @@
-enum Weather {
+export enum Weather {
   Sunny = 'sunny',
   Rainy = 'rainy',
   Cloudy = 'cloudy',
@@ -6,14 +6,14 @@ enum Weather {
   Windy = 'windy',
 }
 
-enum Visibility {
+export enum Visibility {
   Great = 'great',
   Good = 'good',
   Ok = 'ok',
   Poor = 'poor',
 }
 
-interface DiaryEntry {
+export interface DiaryEntry {
   id: number;
   date: string;
   weather: Weather;
@@ -21,6 +21,11 @@ interface DiaryEntry {
   comment: string;
 }
 
-type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
+export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
 
-type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;
+export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;
+
+interface DiariesProps {
+  diaries: DiaryEntry[] | undefined,
+  setDiaries: React.Dispatch<React.SetStateAction<DiaryEntry[] | undefined>>
+}

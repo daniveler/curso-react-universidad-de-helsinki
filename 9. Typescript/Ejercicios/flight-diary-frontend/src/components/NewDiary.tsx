@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Weather, Visibility, DiariesProps } from "../types.d"
+import { Weather, Visibility, DiariesProps, DiaryEntry } from "../types.d"
 import diariesService from "../services/diaries"
 
 const NewDiary = (props: DiariesProps) => {
@@ -15,9 +15,11 @@ const NewDiary = (props: DiariesProps) => {
       date, weather, visibility, comment
     }
 
-    const response = await diariesService.createDiary(newDiary)
+    const response: DiaryEntry[] | undefined = await diariesService.createDiary(newDiary)
 
-    props.setDiaries(props.diaries?.concat(response))
+    if(response) {
+      props.setDiaries(props.diaries?.concat(response))
+    }
   }
 
   return <>

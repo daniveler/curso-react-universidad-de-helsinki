@@ -27,7 +27,7 @@ const NewDiary = (props: DiariesProps) => {
       <form onSubmit={handleCreateDiary}>
         <div>
           <label>Date</label>
-          <input id="dateInput" onChange={(e) => setDate(e.target.value)}></input>
+          <input id="dateInput" type="date" onChange={(e) => setDate(e.target.value)}></input>
         </div>
         <div>
           <label>Weather</label>

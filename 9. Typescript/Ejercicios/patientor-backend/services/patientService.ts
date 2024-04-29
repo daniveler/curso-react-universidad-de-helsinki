@@ -1,15 +1,10 @@
 import patientsData from '../data/patients'
-import { NewPatient, Patient, PatientNoSsn } from '../data/types'
+import { NewPatient, Patient } from '../data/types'
 import { v4 as uuidv4 } from 'uuid'
 
-const getPatientsNoSsl = (): PatientNoSsn[] => {
-  const patients: PatientNoSsn[] = patientsData.map(({ id, name, dateOfBirth, gender, occupation }) => (
-    {
-      id, name, dateOfBirth, gender, occupation
-    }
-  ))
+const getPatients = (): Patient[] => {
 
-  return patients
+  return patientsData
 }
 
 const getPatientById = (id: string): Patient | undefined => {
@@ -30,7 +25,7 @@ const addNewPatient = (patient: NewPatient): Patient => {
 }
 
 export default {
-  getPatientsNoSsl,
+  getPatients,
   getPatientById,
   addNewPatient
 }

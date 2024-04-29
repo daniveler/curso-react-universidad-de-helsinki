@@ -5,7 +5,7 @@ import patientService from '../services/patientService'
 const patientsRouter: Router = express.Router()
 
 patientsRouter.get('/', (req: Request, res: Response) => {
-  const patients: PatientNoSsn[] = patientService.getPatientsNoSsl()
+  const patients: PatientNoSsn[] = patientService.getPatients()
 
   res.status(200).send(patients)
 })

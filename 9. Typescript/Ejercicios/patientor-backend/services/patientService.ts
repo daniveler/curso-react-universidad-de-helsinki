@@ -12,9 +12,16 @@ const getPatientsNoSsl = (): PatientNoSsn[] => {
   return patients
 }
 
+const getPatientById = (id: string): Patient | undefined => {
+  const patient = patientsData.find(p => p.id === id )
+
+  return patient
+}
+
 const addNewPatient = (patient: NewPatient): Patient => {
   const newPatient = {
     id: uuidv4(),
+    entries: [],
     ...patient
   }
 
@@ -24,5 +31,6 @@ const addNewPatient = (patient: NewPatient): Patient => {
 
 export default {
   getPatientsNoSsl,
+  getPatientById,
   addNewPatient
 }
